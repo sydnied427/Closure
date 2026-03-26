@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: waitlist
     description: Waitlist operations
+  - name: letters
+    description: Letter operations
 paths:
   /healthz:
     get:
@@ -57,6 +59,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /letters:
+    post:
+      operationId: createLetter
+      tags: [letters]
+      summary: Seal a letter
+      description: Save a letter with recipient, body, delivery option, and optional media attachments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLetterRequest"
+      responses:
+        "201":
+          description: Letter sealed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateLetterResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -83,6 +110,45 @@ components:
           type: string
       required:
         - success
+        - message
+    CreateLetterRequest:
+      type: object
+      properties:
+        recipient:
+          type: string
+        body:
+          type: string
+        deliveryType:
+          type: string
+          enum: [date, sealed]
+        deliveryDate:
+          type: string
+          nullable: true
+          description: ISO date string, required when deliveryType is "date"
+        audioData:
+          type: string
+          nullable: true
+          description: Base64-encoded audio data
+        videoData:
+          type: string
+          nullable: true
+          description: Base64-encoded video data
+      required:
+        - recipient
+        - body
+        - deliveryType
+    CreateLetterResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        id:
+          type: integer
+        message:
+          type: string
+      required:
+        - success
+        - id
         - message
     ErrorResponse:
       type: object

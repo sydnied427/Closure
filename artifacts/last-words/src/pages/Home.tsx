@@ -1,11 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PenLine, Send, Lock } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { NoiseBackground } from '@/components/NoiseBackground';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { WaitlistForm } from '@/components/WaitlistForm';
 
 export default function Home() {
+  const [, navigate] = useLocation();
+
   const scrollToWaitlist = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
@@ -56,13 +59,12 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <a 
-                href="#waitlist"
-                onClick={scrollToWaitlist}
+              <button
+                onClick={() => navigate("/write")}
                 className="inline-flex h-14 items-center justify-center rounded-md bg-primary px-8 text-lg font-serif font-medium text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 hover:-translate-y-0.5 transition-all duration-300"
               >
                 Write Your First Letter
-              </a>
+              </button>
             </motion.div>
           </div>
         </section>

@@ -27,3 +27,19 @@ export const JoinWaitlistResponse = zod.object({
   success: zod.boolean(),
   message: zod.string(),
 });
+
+/**
+ * Save a letter with recipient, body, delivery option, and optional media attachments
+ * @summary Seal a letter
+ */
+export const CreateLetterBody = zod.object({
+  recipient: zod.string(),
+  body: zod.string(),
+  deliveryType: zod.enum(["date", "sealed"]),
+  deliveryDate: zod
+    .string()
+    .nullish()
+    .describe('ISO date string, required when deliveryType is \"date\"'),
+  audioData: zod.string().nullish().describe("Base64-encoded audio data"),
+  videoData: zod.string().nullish().describe("Base64-encoded video data"),
+});

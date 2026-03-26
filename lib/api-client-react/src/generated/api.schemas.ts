@@ -18,6 +18,32 @@ export interface WaitlistResponse {
   message: string;
 }
 
+export type CreateLetterRequestDeliveryType =
+  (typeof CreateLetterRequestDeliveryType)[keyof typeof CreateLetterRequestDeliveryType];
+
+export const CreateLetterRequestDeliveryType = {
+  date: "date",
+  sealed: "sealed",
+} as const;
+
+export interface CreateLetterRequest {
+  recipient: string;
+  body: string;
+  deliveryType: CreateLetterRequestDeliveryType;
+  /** ISO date string, required when deliveryType is "date" */
+  deliveryDate?: string | null;
+  /** Base64-encoded audio data */
+  audioData?: string | null;
+  /** Base64-encoded video data */
+  videoData?: string | null;
+}
+
+export interface CreateLetterResponse {
+  success: boolean;
+  id: number;
+  message: string;
+}
+
 export interface ErrorResponse {
   error: string;
 }

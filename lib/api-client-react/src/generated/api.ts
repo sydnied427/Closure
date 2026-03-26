@@ -17,6 +17,8 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CreateLetterRequest,
+  CreateLetterResponse,
   ErrorResponse,
   HealthStatus,
   WaitlistRequest,
@@ -193,4 +195,91 @@ export const useJoinWaitlist = <
   TContext
 > => {
   return useMutation(getJoinWaitlistMutationOptions(options));
+};
+
+/**
+ * Save a letter with recipient, body, delivery option, and optional media attachments
+ * @summary Seal a letter
+ */
+export const getCreateLetterUrl = () => {
+  return `/api/letters`;
+};
+
+export const createLetter = async (
+  createLetterRequest: CreateLetterRequest,
+  options?: RequestInit,
+): Promise<CreateLetterResponse> => {
+  return customFetch<CreateLetterResponse>(getCreateLetterUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createLetterRequest),
+  });
+};
+
+export const getCreateLetterMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createLetter>>,
+    TError,
+    { data: BodyType<CreateLetterRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createLetter>>,
+  TError,
+  { data: BodyType<CreateLetterRequest> },
+  TContext
+> => {
+  const mutationKey = ["createLetter"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createLetter>>,
+    { data: BodyType<CreateLetterRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createLetter(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateLetterMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createLetter>>
+>;
+export type CreateLetterMutationBody = BodyType<CreateLetterRequest>;
+export type CreateLetterMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Seal a letter
+ */
+export const useCreateLetter = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createLetter>>,
+    TError,
+    { data: BodyType<CreateLetterRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createLetter>>,
+  TError,
+  { data: BodyType<CreateLetterRequest> },
+  TContext
+> => {
+  return useMutation(getCreateLetterMutationOptions(options));
 };
