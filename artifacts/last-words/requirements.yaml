@@ -1,0 +1,12 @@
+packages:
+  "framer-motion": "For elegant scroll-based fade-in animations"
+  "react-hook-form": "For robust form state management"
+  "@hookform/resolvers": "For Zod schema validation with react-hook-form"
+  "clsx": "For conditional class joining"
+  "tailwind-merge": "For merging tailwind classes"
+
+images: []
+
+notes:
+  - Uses useJoinWaitlist from @workspace/api-client-react for the waitlist submission.
+  - UI relies heavily on typography and CSS noise textures rather than images.

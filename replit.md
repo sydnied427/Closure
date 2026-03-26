@@ -16,6 +16,22 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### `artifacts/last-words` — Landing Page
+React + Vite landing page for "Last Words" (emotional writing platform for grief). Serves at `/` (root path).
+- All sections: Hero, The Why, How It Works, Pull Quote, Features, Waitlist CTA, Footer
+- Waitlist form POSTs to `/api/waitlist`, stores emails in PostgreSQL via Drizzle
+- Typography: Playfair Display (serif headlines) + Inter (body)
+- Color palette: aged parchment, deep charcoal, dusty rose, warm taupe
+- Framer Motion scroll-based fade-in animations
+
+### `lib/db/src/schema/waitlist.ts`
+Drizzle schema for `waitlist` table (id, email unique, created_at).
+
+### `artifacts/api-server/src/routes/waitlist.ts`
+`POST /api/waitlist` — validates email, prevents duplicates, inserts into DB.
+
 ## Structure
 
 ```text

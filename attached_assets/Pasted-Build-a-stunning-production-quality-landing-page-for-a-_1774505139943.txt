@@ -1,0 +1,29 @@
+Build a stunning, production-quality landing page for a web app called "Last Words" — a platform where people write the things they never got to say to someone they've lost. The words left unspoken at the funeral. The apology never delivered. The love never expressed out loud.
+The core emotional premise: Grief carries the weight of unfinished conversations. Last Words gives people a private, beautiful space to finally say them — not for the person who's gone, but for themselves.
+Visual Identity:
+
+Color palette: warm, muted, and intimate — aged parchment, dusty rose, warm taupe, soft ivory, deep charcoal. No bright or saturated colors.
+Typography: bold serif editorial font (Playfair Display or Cormorant Garamond) for headlines, clean sans-serif (Inter or DM Sans) for body. Should feel like a newspaper meets a handwritten letter.
+Mood: quiet, emotional, premium. Think NYT meets a eulogy written at 2am. No stock photo energy. No generic SaaS feel.
+
+Page Sections (in order):
+
+Hero — Full-width. Large editorial headline: "Say what you never got to say." Subheadline: "A private space for the words you've been carrying since you lost them." Single CTA button: "Write Your First Letter". Warm textured background, no images.
+The Why — A short, deeply human paragraph. Something like: "Most of us leave funerals with something still on our lips. A thank you. An apology. A memory we never shared. Last Words exists for those moments." Large type, centered, generous whitespace.
+How It Works — 3 steps with subtle icons: Write your letter → Address it to them → Keep it private or share it with someone who loved them too.
+Emotional Pull Quote — Full width, warm background, large serif type: "For the conversation that didn't get to happen."
+Features — 3 columns: Completely Private, Beautifully Simple, Yours to Keep. Short, warm descriptions. No corporate language.
+Waitlist CTA — Headline: "You don't have to keep carrying it alone." Email input + submit button. Store emails in Replit DB.
+Footer — Minimal. App name, tagline, copyright.
+
+Technical requirements:
+
+Fully responsive across mobile and desktop
+Smooth scroll behavior
+Subtle fade-in animations on scroll
+Waitlist form stores submitted emails via Replit DB
+No placeholder images — atmosphere created entirely through typography, color, and texture
+Deploy publicly via a Replit URL
+Use multiple files and components, not a single HTML file — structured project architecture
+
+

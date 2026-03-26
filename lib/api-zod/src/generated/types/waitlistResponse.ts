@@ -5,19 +5,8 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface WaitlistRequest {
-  email: string;
-}
 
 export interface WaitlistResponse {
   success: boolean;
   message: string;
-}
-
-export interface ErrorResponse {
-  error: string;
 }
