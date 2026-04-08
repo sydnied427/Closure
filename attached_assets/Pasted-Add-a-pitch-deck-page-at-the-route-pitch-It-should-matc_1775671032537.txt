@@ -1,0 +1,30 @@
+Add a pitch deck page at the route /pitch. It should match Closure's exact branding — same cream background, same serif fonts, same warm brown accent color. Build it as a fullscreen slideshow with left/right arrow navigation and keyboard arrow key support. No external libraries.
+8 slides:
+Slide 1 — Hook
+Big text centered: "There are words you never got to say."
+Subtext: "To someone who died. Someone who left. Someone you stopped speaking to. Someone you never thanked."
+Bottom: Closure logo + tagline "Your final say."
+Slide 2 — The Problem
+Headline: "Unfinished conversations don't disappear."
+3 stats in cards: "1 in 3 people report unresolved grief from unsaid words" / "Breakups, estrangements, and loss leave emotional weight that has nowhere to go" / "Nothing exists between therapy and a notes app that feels like a ritual"
+Slide 3 — The Solution
+Headline: "Closure is a private ritual for unfinished feelings."
+Show the 5-step flow as a visual horizontal timeline: Choose Intention → Write → Create → Choose Fate → Seal
+Slide 4 — Product
+Headline: "Not just a text box. A ritual."
+4 feature highlights: Guided emotional prompts / 4 visual themes / Seal, time capsule, or release / Persistent archive with Google sign-in
+Slide 5 — Who It's For
+Headline: "Everyone carries something unsaid."
+6 cards: Grief / Gratitude / Love / Anger / Forgiveness / Estrangement — same one-line descriptions from the app
+Slide 6 — Market
+Headline: "The market for emotional processing is massive."
+3 numbers large and centered: "$240B — Global mental wellness market" / "500M+ — Active journaling and self-help app users" / "73% — People who've experienced unresolved grief"
+Slide 7 — Business Model
+Headline: "Free to feel. Pro to preserve."
+Two columns: Free tier (text letters, seal or release, 1 box) vs Pro $4.99/mo (voice notes, video, photos, time capsules, unlimited boxes)
+Future: therapy platform partnerships (BetterHelp, Calm)
+Slide 8 — Founder
+Headline: "Why me."
+Text: "I'm Sydnie Dorleus — a chemical engineering student, builder, and someone who has her own unsaid words. I built Closure in one week because I needed it to exist. The pages in my journal are why this app is real."
+Bottom: "Built for the Replit Agent 4 Buildathon. April 2026."
+Add a small "← Back to Closure" link in the top left corner. Add a slide counter (1/8) in the bottom right. Make slide transitions a smooth horizontal fade — 300ms ease.

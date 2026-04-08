@@ -6,21 +6,27 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Create from "@/pages/Create";
 import Archive from "@/pages/Archive";
+import Pitch from "@/pages/Pitch";
 import { Navbar } from "@/components/layout/Navbar";
 
 const queryClient = new QueryClient();
 
 function Router() {
   return (
-    <>
-      <Navbar />
-      <Switch>
-        <Route path="/" component={Landing} />
-        <Route path="/create" component={Create} />
-        <Route path="/my-boxes" component={Archive} />
-        <Route component={NotFound} />
-      </Switch>
-    </>
+    <Switch>
+      <Route path="/pitch" component={Pitch} />
+      <Route>
+        <>
+          <Navbar />
+          <Switch>
+            <Route path="/" component={Landing} />
+            <Route path="/create" component={Create} />
+            <Route path="/my-boxes" component={Archive} />
+            <Route component={NotFound} />
+          </Switch>
+        </>
+      </Route>
+    </Switch>
   );
 }
 
