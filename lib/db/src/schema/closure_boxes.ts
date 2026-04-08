@@ -5,6 +5,7 @@ import { z } from "zod/v4";
 export const closureBoxesTable = pgTable("closure_boxes", {
   id: serial("id").primaryKey(),
   sessionId: text("session_id").notNull(),
+  userId: text("user_id"),
   theme: text("theme").notNull(),
   intention: text("intention").notNull(),
   recipientName: text("recipient_name").notNull(),
