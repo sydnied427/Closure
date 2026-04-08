@@ -18,12 +18,14 @@ import { Mic, Image as ImageIcon, Video, X, Calendar as CalendarIcon, ArrowRight
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
+import { TreasureBox } from "@/components/TreasureBox";
 
 export default function Create() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [boxTriggered, setBoxTriggered] = useState(false);
   
   const [formData, setFormData] = useState<Partial<CreateClosureBoxRequest>>({
     theme: "classic" as CreateClosureBoxRequestTheme,
@@ -52,26 +54,35 @@ export default function Create() {
       toast({ title: "Incomplete", description: "Please provide a recipient and your letter.", variant: "destructive" });
       return;
     }
-    
+
     setIsSubmitting(true);
+    setBoxTriggered(true);
+
+    const animDuration = formData.fate === "release" ? 2000 : 2200;
+    const animDelay = new Promise<void>(res => setTimeout(res, animDuration));
+
     try {
-      await createBox.mutateAsync({
-        data: {
-          sessionId: sessionId.current,
-          theme: formData.theme as CreateClosureBoxRequestTheme,
-          intention: formData.intention as CreateClosureBoxRequestIntention,
-          recipientName: formData.recipientName,
-          letterContent: formData.letterContent,
-          fate: formData.fate as CreateClosureBoxRequestFate,
-          fateDate: formData.fateDate,
-          audioData: formData.audioData,
-          photoData: formData.photoData,
-          videoData: formData.videoData,
-        }
-      });
-      setStep(6); // Success screen
+      await Promise.all([
+        createBox.mutateAsync({
+          data: {
+            sessionId: sessionId.current,
+            theme: formData.theme as CreateClosureBoxRequestTheme,
+            intention: formData.intention as CreateClosureBoxRequestIntention,
+            recipientName: formData.recipientName,
+            letterContent: formData.letterContent,
+            fate: formData.fate as CreateClosureBoxRequestFate,
+            fateDate: formData.fateDate,
+            audioData: formData.audioData,
+            photoData: formData.photoData,
+            videoData: formData.videoData,
+          }
+        }),
+        animDelay,
+      ]);
+      setStep(6);
     } catch (error) {
       toast({ title: "Error", description: "Could not seal your box. Please try again.", variant: "destructive" });
+      setBoxTriggered(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -279,7 +290,11 @@ export default function Create() {
           {step === 5 && (
             <motion.div key="step5" variants={containerVariants} initial="hidden" animate="visible" exit="exit" className="w-full max-w-2xl">
               <h2 className="text-3xl font-serif text-center mb-2">Choose its fate</h2>
-              <p className="text-center text-muted-foreground mb-12">What happens to this box now?</p>
+              <p className="text-center text-muted-foreground mb-8">What happens to this box now?</p>
+
+              <div className="mb-10">
+                <TreasureBox fate={formData.fate} triggered={boxTriggered} />
+              </div>
               
               <div className="space-y-4">
                 {[
