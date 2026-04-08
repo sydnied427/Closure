@@ -3,25 +3,40 @@ import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { getOrCreateSessionId } from "@/lib/session";
-import { useListClosureBoxes, getListClosureBoxesQueryKey } from "@workspace/api-client-react";
+import { useListClosureBoxes, useListMyClosureBoxes, getListClosureBoxesQueryKey, getListMyClosureBoxesQueryKey } from "@workspace/api-client-react";
+import { useAuth } from "@workspace/replit-auth-web";
 import { Lock, Unlock, Wind, Image as ImageIcon, Mic, Video } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Archive() {
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     setSessionId(getOrCreateSessionId());
   }, []);
 
-  const { data: response, isLoading } = useListClosureBoxes(sessionId || "", {
+  // Authenticated: load by userId (and also links any anonymous session boxes)
+  const { data: myResponse, isLoading: myLoading } = useListMyClosureBoxes(
+    { sessionId: sessionId ?? undefined },
+    {
+      query: {
+        enabled: !authLoading && isAuthenticated && !!sessionId,
+        queryKey: getListMyClosureBoxesQueryKey({ sessionId: sessionId ?? undefined }),
+      },
+    }
+  );
+
+  // Anonymous: load by sessionId only
+  const { data: sessionResponse, isLoading: sessionLoading } = useListClosureBoxes(sessionId || "", {
     query: {
-      enabled: !!sessionId,
+      enabled: !authLoading && !isAuthenticated && !!sessionId,
       queryKey: getListClosureBoxesQueryKey(sessionId || ""),
     }
   });
 
-  const boxes = response?.boxes || [];
+  const isLoading = authLoading || (isAuthenticated ? myLoading : sessionLoading);
+  const boxes = (isAuthenticated ? myResponse?.boxes : sessionResponse?.boxes) ?? [];
 
   const getIntentionColor = (intention: string) => {
     switch (intention) {

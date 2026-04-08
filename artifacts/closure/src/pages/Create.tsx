@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { getOrCreateSessionId } from "@/lib/session";
 import { useCreateClosureBox } from "@workspace/api-client-react";
+import { useAuth } from "@workspace/replit-auth-web";
 import { 
   CreateClosureBoxRequestTheme, 
   CreateClosureBoxRequestIntention, 
@@ -23,6 +24,7 @@ import { TreasureBox } from "@/components/TreasureBox";
 export default function Create() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { isAuthenticated, login } = useAuth();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [boxTriggered, setBoxTriggered] = useState(false);
@@ -345,9 +347,24 @@ export default function Create() {
                 <Lock size={40} className="opacity-80" />
               </div>
               <h2 className="text-4xl font-serif mb-4">Your box is sealed.</h2>
-              <p className="text-muted-foreground mb-12 text-lg">
+              <p className="text-muted-foreground mb-8 text-lg">
                 It is safe. You can let go now.
               </p>
+              {!isAuthenticated && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mb-8 p-5 rounded-lg border border-border/60 bg-muted/30"
+                >
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Sign in to save your box forever and access it from any device.
+                  </p>
+                  <Button onClick={login} variant="outline" size="sm" className="w-full font-medium">
+                    Sign in to save
+                  </Button>
+                </motion.div>
+              )}
               <Button onClick={() => setLocation("/my-boxes")} size="lg" className="px-8 font-medium">
                 Return to Archive
               </Button>

@@ -42,9 +42,7 @@ export const CreateLetterBody = zod.object({
  * @summary Create a closure box
  */
 export const CreateClosureBoxBody = zod.object({
-  sessionId: zod
-    .string()
-    .describe("Client-generated UUID for session tracking"),
+  sessionId: zod.string(),
   theme: zod.enum(["classic", "modern", "dark", "floral"]),
   intention: zod.enum([
     "grief",
@@ -57,13 +55,10 @@ export const CreateClosureBoxBody = zod.object({
   recipientName: zod.string(),
   letterContent: zod.string(),
   fate: zod.enum(["seal", "open_on_date", "release"]),
-  fateDate: zod
-    .string()
-    .nullish()
-    .describe("ISO date string, required when fate is open_on_date"),
-  audioData: zod.string().nullish().describe("Base64 audio"),
-  photoData: zod.string().nullish().describe("Base64 image"),
-  videoData: zod.string().nullish().describe("Base64 video"),
+  fateDate: zod.string().nullish(),
+  audioData: zod.string().nullish(),
+  photoData: zod.string().nullish(),
+  videoData: zod.string().nullish(),
 });
 
 /**
@@ -88,4 +83,107 @@ export const ListClosureBoxesResponse = zod.object({
       createdAt: zod.string(),
     }),
   ),
+});
+
+/**
+ * @summary List boxes for the authenticated user (includes their sessionId boxes)
+ */
+export const ListMyClosureBoxesQueryParams = zod.object({
+  sessionId: zod.coerce.string().optional(),
+});
+
+export const ListMyClosureBoxesResponse = zod.object({
+  boxes: zod.array(
+    zod.object({
+      id: zod.number(),
+      theme: zod.string(),
+      intention: zod.string(),
+      recipientName: zod.string(),
+      fate: zod.string(),
+      fateDate: zod.string().nullish(),
+      hasAudio: zod.boolean(),
+      hasPhoto: zod.boolean(),
+      hasVideo: zod.boolean(),
+      createdAt: zod.string(),
+    }),
+  ),
+});
+
+/**
+ * @summary Get the currently authenticated user
+ */
+export const GetCurrentAuthUserHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const GetCurrentAuthUserResponse = zod.object({
+  user: zod.union([
+    zod.object({
+      id: zod.string(),
+      email: zod.string().email().nullable(),
+      firstName: zod.string().nullable(),
+      lastName: zod.string().nullable(),
+      profileImageUrl: zod.string().nullable(),
+    }),
+    zod.null(),
+  ]),
+});
+
+/**
+ * @summary Start the browser OIDC login flow
+ */
+export const BeginBrowserLoginQueryParams = zod.object({
+  returnTo: zod.coerce.string().optional(),
+});
+
+/**
+ * @summary Complete the browser OIDC login flow
+ */
+export const HandleBrowserLoginCallbackQueryParams = zod.object({
+  code: zod.coerce.string().optional(),
+  state: zod.coerce.string().optional(),
+  iss: zod.coerce.string().url().optional(),
+});
+
+/**
+ * @summary Clear the session and begin OIDC logout
+ */
+export const LogoutBrowserSessionHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+/**
+ * @summary Exchange a mobile OIDC code for a session token
+ */
+
+export const ExchangeMobileAuthorizationCodeBody = zod.object({
+  code: zod.string().min(1),
+  code_verifier: zod.string().min(1),
+  redirect_uri: zod.string().url().min(1),
+  state: zod.string().min(1),
+  nonce: zod.string().min(1).optional(),
+});
+
+export const ExchangeMobileAuthorizationCodeResponse = zod.object({
+  token: zod.string(),
+});
+
+/**
+ * @summary Delete a mobile session token
+ */
+export const LogoutMobileSessionHeader = zod.object({
+  Authorization: zod
+    .string()
+    .optional()
+    .describe("Opaque session token — `Bearer <sid>`."),
+});
+
+export const LogoutMobileSessionResponse = zod.object({
+  success: zod.boolean(),
 });

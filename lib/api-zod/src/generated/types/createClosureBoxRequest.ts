@@ -10,19 +10,14 @@ import type { CreateClosureBoxRequestIntention } from "./createClosureBoxRequest
 import type { CreateClosureBoxRequestTheme } from "./createClosureBoxRequestTheme";
 
 export interface CreateClosureBoxRequest {
-  /** Client-generated UUID for session tracking */
   sessionId: string;
   theme: CreateClosureBoxRequestTheme;
   intention: CreateClosureBoxRequestIntention;
   recipientName: string;
   letterContent: string;
   fate: CreateClosureBoxRequestFate;
-  /** ISO date string, required when fate is open_on_date */
   fateDate?: string | null;
-  /** Base64 audio */
   audioData?: string | null;
-  /** Base64 image */
   photoData?: string | null;
-  /** Base64 video */
   videoData?: string | null;
 }

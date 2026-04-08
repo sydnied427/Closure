@@ -73,20 +73,15 @@ export const CreateClosureBoxRequestFate = {
 } as const;
 
 export interface CreateClosureBoxRequest {
-  /** Client-generated UUID for session tracking */
   sessionId: string;
   theme: CreateClosureBoxRequestTheme;
   intention: CreateClosureBoxRequestIntention;
   recipientName: string;
   letterContent: string;
   fate: CreateClosureBoxRequestFate;
-  /** ISO date string, required when fate is open_on_date */
   fateDate?: string | null;
-  /** Base64 audio */
   audioData?: string | null;
-  /** Base64 image */
   photoData?: string | null;
-  /** Base64 video */
   videoData?: string | null;
 }
 
@@ -116,3 +111,64 @@ export interface ListClosureBoxesResponse {
 export interface ErrorResponse {
   error: string;
 }
+
+export interface AuthUser {
+  id: string;
+  /** @nullable */
+  email: string | null;
+  /** @nullable */
+  firstName: string | null;
+  /** @nullable */
+  lastName: string | null;
+  /** @nullable */
+  profileImageUrl: string | null;
+}
+
+export interface AuthUserEnvelope {
+  user: AuthUser | null;
+}
+
+export interface MobileTokenExchangeRequest {
+  /** @minLength 1 */
+  code: string;
+  /** @minLength 1 */
+  code_verifier: string;
+  /** @minLength 1 */
+  redirect_uri: string;
+  /** @minLength 1 */
+  state: string;
+  /** @minLength 1 */
+  nonce?: string;
+}
+
+export interface MobileTokenExchangeSuccess {
+  token: string;
+}
+
+export const LogoutSuccessValue = {
+  success: true,
+} as const;
+export type LogoutSuccess = typeof LogoutSuccessValue;
+
+export interface ErrorEnvelope {
+  error: string;
+}
+
+/**
+ * Opaque session token — `Bearer <sid>`.
+ */
+export type AuthorizationSessionHeaderParameter = string;
+
+export type ListMyClosureBoxesParams = {
+  sessionId?: string;
+};
+
+export type BeginBrowserLoginParams = {
+  returnTo?: string;
+};
+
+export type HandleBrowserLoginCallbackParams = {
+  code?: string;
+  state?: string;
+  iss?: string;
+};
