@@ -19,3 +19,4 @@
 
 export * from "./waitlist";
 export * from "./letters";
+export * from "./closure_boxes";

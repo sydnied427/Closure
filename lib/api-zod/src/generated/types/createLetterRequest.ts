@@ -11,10 +11,7 @@ export interface CreateLetterRequest {
   recipient: string;
   body: string;
   deliveryType: CreateLetterRequestDeliveryType;
-  /** ISO date string, required when deliveryType is "date" */
   deliveryDate?: string | null;
-  /** Base64-encoded audio data */
   audioData?: string | null;
-  /** Base64-encoded video data */
   videoData?: string | null;
 }

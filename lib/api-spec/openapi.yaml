@@ -14,13 +14,14 @@ tags:
     description: Waitlist operations
   - name: letters
     description: Letter operations
+  - name: closure
+    description: Closure app operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -33,7 +34,6 @@ paths:
       operationId: joinWaitlist
       tags: [waitlist]
       summary: Join waitlist
-      description: Submit an email address to join the waitlist
       requestBody:
         required: true
         content:
@@ -64,7 +64,6 @@ paths:
       operationId: createLetter
       tags: [letters]
       summary: Seal a letter
-      description: Save a letter with recipient, body, delivery option, and optional media attachments
       requestBody:
         required: true
         content:
@@ -84,6 +83,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /closure/boxes:
+    post:
+      operationId: createClosureBox
+      tags: [closure]
+      summary: Create a closure box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateClosureBoxRequest"
+      responses:
+        "201":
+          description: Box created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateClosureBoxResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /closure/boxes/{sessionId}:
+    get:
+      operationId: listClosureBoxes
+      tags: [closure]
+      summary: List boxes for a session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of boxes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListClosureBoxesResponse"
 components:
   schemas:
     HealthStatus:
@@ -124,15 +165,12 @@ components:
         deliveryDate:
           type: string
           nullable: true
-          description: ISO date string, required when deliveryType is "date"
         audioData:
           type: string
           nullable: true
-          description: Base64-encoded audio data
         videoData:
           type: string
           nullable: true
-          description: Base64-encoded video data
       required:
         - recipient
         - body
@@ -150,6 +188,104 @@ components:
         - success
         - id
         - message
+    CreateClosureBoxRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: Client-generated UUID for session tracking
+        theme:
+          type: string
+          enum: [classic, modern, dark, floral]
+        intention:
+          type: string
+          enum: [grief, gratitude, love, anger, forgiveness, estrangement]
+        recipientName:
+          type: string
+        letterContent:
+          type: string
+        fate:
+          type: string
+          enum: [seal, open_on_date, release]
+        fateDate:
+          type: string
+          nullable: true
+          description: ISO date string, required when fate is open_on_date
+        audioData:
+          type: string
+          nullable: true
+          description: Base64 audio
+        photoData:
+          type: string
+          nullable: true
+          description: Base64 image
+        videoData:
+          type: string
+          nullable: true
+          description: Base64 video
+      required:
+        - sessionId
+        - theme
+        - intention
+        - recipientName
+        - letterContent
+        - fate
+    CreateClosureBoxResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        boxId:
+          type: integer
+        sessionId:
+          type: string
+      required:
+        - success
+        - boxId
+        - sessionId
+    ClosureBox:
+      type: object
+      properties:
+        id:
+          type: integer
+        theme:
+          type: string
+        intention:
+          type: string
+        recipientName:
+          type: string
+        fate:
+          type: string
+        fateDate:
+          type: string
+          nullable: true
+        hasAudio:
+          type: boolean
+        hasPhoto:
+          type: boolean
+        hasVideo:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - theme
+        - intention
+        - recipientName
+        - fate
+        - hasAudio
+        - hasPhoto
+        - hasVideo
+        - createdAt
+    ListClosureBoxesResponse:
+      type: object
+      properties:
+        boxes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClosureBox"
+      required:
+        - boxes
     ErrorResponse:
       type: object
       properties:

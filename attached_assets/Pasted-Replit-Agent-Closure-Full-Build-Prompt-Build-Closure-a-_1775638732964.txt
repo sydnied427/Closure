@@ -1,0 +1,58 @@
+Replit Agent — Closure: Full Build Prompt
+Build "Closure" — a full-stack emotional messaging web app. Think: gamified Catholic confessions box meets a treasure chest. Serious but warm, ritualistic but accessible. NOT melancholy. NOT techy. NOT AI-looking.
+NAME: Closure TAGLINE: Your final say.
+
+TECH STACK: Full-stack web app. User authentication, database storage for user-generated content (letters, voice notes, images, videos). Frontend + backend. Users create accounts, build a personal vault of messages, access them later.
+
+LANDING PAGE (route: /)
+Keep muted cream/warm palette, serif typography. Feels premium, editorial, human.
+Sections:
+1. Hero — Headline: "Your final say." Subtitle rotates softly: "To someone you lost." / "To the ex you never got closure with." / "To the teacher who changed your life." / "To the friend you drifted from." / "To the parent you stopped speaking to." / "To the person you never thanked." CTA: "Open Your Box" (free, no account needed to start)
+2. What is Closure? — 3 steps, ritualistic not transactional: Choose your intention → Create your message → Seal it your way
+3. Who it's for — 6 emotion cards (NOT clinical labels, one emotional line each):
+    * Grief — "They're gone, but you still have words."
+    * Gratitude — "You never got to say thank you."
+    * Love — "It ended before you were ready."
+    * Anger — "You needed to say it. Now you can."
+    * Forgiveness — "For them. Or for yourself."
+    * Estrangement — "The silence between you has weight."
+4. Interactive moment — Animated box preview on the page. User types a name. A small envelope appears addressed to that person and drops into the box with a soft animation. No send. Just a moment.
+5. Manifesto — "Some words were never meant to be sent. They were meant to be said."
+6. CTA — "Start for free. No account needed."
+
+APP (route: /create)
+Guided step-by-step experience. Journey stage indicator at top (not a loading bar — think 5 soft dots or stages). Calm transitions between steps. The central UI metaphor throughout is a treasure box / chest — ornate but minimal.
+Step 0 — Pick a Theme (first thing user sees): Before anything else, user picks a visual theme. Options:
+* Classic — parchment, ink, candlelight, wax seal aesthetic
+* Modern — clean cream, minimal, thin serif, muted rose accents
+* Dark — deep navy/charcoal, gold accents, candlelight glow
+* Floral — soft botanical, pressed flower, journal aesthetic Each theme changes the entire visual language of the experience from this point forward.
+Step 1 — Choose your intention: Six cards: Grief / Gratitude / Love / Anger / Forgiveness / Estrangement. Soft selection animation. One card lights up. User proceeds.
+Step 2 — Guided prompts (based on intention, optional): 2–3 gentle open-ended prompts shown as soft text above the writing area. For Gratitude: "What did they give you that they don't know about?" / "What would you want them to feel reading this?" / "What took too long to say?" These are invitations, not forms. User can ignore them.
+Step 3 — Create your message:
+* ✉️ Letter (text, always free)
+* 🎙 Voice note (paid — show subtle lock icon, "Unlock with Closure Pro")
+* 🖼 Photo (paid)
+* 🎥 Video (paid) Multiple items can go into one box.
+Step 4 — Choose the fate: Three card options:
+* 🔒 Seal it — Locked in your vault forever. Only you can open it.
+* ⏳ Open on a date — Unlocks on a future date you choose. (Paid)
+* 🔥 Release it — Symbolic permanent deletion. A letting-go.
+Step 5 — The Ritual (most important step): Full-screen animation. The letter/voice/photo/video the user created visually folds, floats, and drops into an animated treasure box. The box closes. Then based on fate chosen:
+* 🔒 A wax seal stamp closes it. Text: "Sealed."
+* ⏳ A small clock appears on the box lid. Text: "It will open on [date]."
+* 🔥 The box glows, then fades to ash. Text: "Released."
+After animation: clean confirmation screen. Soft, no celebration. Just presence.
+
+AUTH + STORAGE:
+* First message: no account needed, session only
+* To save: prompt to create free account (email + password or Google SSO)
+* Free tier: text letters, seal forever or release, 1 active box
+* Pro ($4.99/mo or $39/yr): voice, photo, video, timed releases, unlimited boxes, themed vault
+
+DESIGN RULES:
+* Muted, warm, editorial. NOT startup-looking.
+* Serif headings, thin sans-serif body
+* Theme system applies globally from Step 0 onward
+* Subtle animations only — nothing bouncy or gamified-feeling
+* The box is the central metaphor. It should feel precious, not playful.

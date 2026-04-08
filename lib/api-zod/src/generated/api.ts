@@ -8,7 +8,6 @@
 import * as zod from "zod";
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
@@ -16,7 +15,6 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
- * Submit an email address to join the waitlist
  * @summary Join waitlist
  */
 export const JoinWaitlistBody = zod.object({
@@ -29,17 +27,65 @@ export const JoinWaitlistResponse = zod.object({
 });
 
 /**
- * Save a letter with recipient, body, delivery option, and optional media attachments
  * @summary Seal a letter
  */
 export const CreateLetterBody = zod.object({
   recipient: zod.string(),
   body: zod.string(),
   deliveryType: zod.enum(["date", "sealed"]),
-  deliveryDate: zod
+  deliveryDate: zod.string().nullish(),
+  audioData: zod.string().nullish(),
+  videoData: zod.string().nullish(),
+});
+
+/**
+ * @summary Create a closure box
+ */
+export const CreateClosureBoxBody = zod.object({
+  sessionId: zod
+    .string()
+    .describe("Client-generated UUID for session tracking"),
+  theme: zod.enum(["classic", "modern", "dark", "floral"]),
+  intention: zod.enum([
+    "grief",
+    "gratitude",
+    "love",
+    "anger",
+    "forgiveness",
+    "estrangement",
+  ]),
+  recipientName: zod.string(),
+  letterContent: zod.string(),
+  fate: zod.enum(["seal", "open_on_date", "release"]),
+  fateDate: zod
     .string()
     .nullish()
-    .describe('ISO date string, required when deliveryType is \"date\"'),
-  audioData: zod.string().nullish().describe("Base64-encoded audio data"),
-  videoData: zod.string().nullish().describe("Base64-encoded video data"),
+    .describe("ISO date string, required when fate is open_on_date"),
+  audioData: zod.string().nullish().describe("Base64 audio"),
+  photoData: zod.string().nullish().describe("Base64 image"),
+  videoData: zod.string().nullish().describe("Base64 video"),
+});
+
+/**
+ * @summary List boxes for a session
+ */
+export const ListClosureBoxesParams = zod.object({
+  sessionId: zod.coerce.string(),
+});
+
+export const ListClosureBoxesResponse = zod.object({
+  boxes: zod.array(
+    zod.object({
+      id: zod.number(),
+      theme: zod.string(),
+      intention: zod.string(),
+      recipientName: zod.string(),
+      fate: zod.string(),
+      fateDate: zod.string().nullish(),
+      hasAudio: zod.boolean(),
+      hasPhoto: zod.boolean(),
+      hasVideo: zod.boolean(),
+      createdAt: zod.string(),
+    }),
+  ),
 });

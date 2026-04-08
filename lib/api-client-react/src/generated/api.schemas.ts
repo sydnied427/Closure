@@ -30,11 +30,8 @@ export interface CreateLetterRequest {
   recipient: string;
   body: string;
   deliveryType: CreateLetterRequestDeliveryType;
-  /** ISO date string, required when deliveryType is "date" */
   deliveryDate?: string | null;
-  /** Base64-encoded audio data */
   audioData?: string | null;
-  /** Base64-encoded video data */
   videoData?: string | null;
 }
 
@@ -42,6 +39,78 @@ export interface CreateLetterResponse {
   success: boolean;
   id: number;
   message: string;
+}
+
+export type CreateClosureBoxRequestTheme =
+  (typeof CreateClosureBoxRequestTheme)[keyof typeof CreateClosureBoxRequestTheme];
+
+export const CreateClosureBoxRequestTheme = {
+  classic: "classic",
+  modern: "modern",
+  dark: "dark",
+  floral: "floral",
+} as const;
+
+export type CreateClosureBoxRequestIntention =
+  (typeof CreateClosureBoxRequestIntention)[keyof typeof CreateClosureBoxRequestIntention];
+
+export const CreateClosureBoxRequestIntention = {
+  grief: "grief",
+  gratitude: "gratitude",
+  love: "love",
+  anger: "anger",
+  forgiveness: "forgiveness",
+  estrangement: "estrangement",
+} as const;
+
+export type CreateClosureBoxRequestFate =
+  (typeof CreateClosureBoxRequestFate)[keyof typeof CreateClosureBoxRequestFate];
+
+export const CreateClosureBoxRequestFate = {
+  seal: "seal",
+  open_on_date: "open_on_date",
+  release: "release",
+} as const;
+
+export interface CreateClosureBoxRequest {
+  /** Client-generated UUID for session tracking */
+  sessionId: string;
+  theme: CreateClosureBoxRequestTheme;
+  intention: CreateClosureBoxRequestIntention;
+  recipientName: string;
+  letterContent: string;
+  fate: CreateClosureBoxRequestFate;
+  /** ISO date string, required when fate is open_on_date */
+  fateDate?: string | null;
+  /** Base64 audio */
+  audioData?: string | null;
+  /** Base64 image */
+  photoData?: string | null;
+  /** Base64 video */
+  videoData?: string | null;
+}
+
+export interface CreateClosureBoxResponse {
+  success: boolean;
+  boxId: number;
+  sessionId: string;
+}
+
+export interface ClosureBox {
+  id: number;
+  theme: string;
+  intention: string;
+  recipientName: string;
+  fate: string;
+  fateDate?: string | null;
+  hasAudio: boolean;
+  hasPhoto: boolean;
+  hasVideo: boolean;
+  createdAt: string;
+}
+
+export interface ListClosureBoxesResponse {
+  boxes: ClosureBox[];
 }
 
 export interface ErrorResponse {

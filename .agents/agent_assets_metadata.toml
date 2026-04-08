@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "Iea1-XuzS8UwOCeGwKy6x"
+uri = "file://artifacts/closure/public/hero.png"
+type = "image"
+title = "soft candlelight old paper"
+
+[[generated]]
+id = "KE1T39TmT0ySdmxAzqxkf"
+uri = "file://artifacts/closure/public/sealed-box.png"
+type = "image"
+title = "sealed wooden box"
+
+[[generated]]
+id = "Q9svb_l06vH_nydFRsUsq"
+uri = "file://artifacts/closure/public/journal.png"
+type = "image"
+title = "open journal with pen"

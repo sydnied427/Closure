@@ -6,10 +6,17 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./closureBox";
+export * from "./createClosureBoxRequest";
+export * from "./createClosureBoxRequestFate";
+export * from "./createClosureBoxRequestIntention";
+export * from "./createClosureBoxRequestTheme";
+export * from "./createClosureBoxResponse";
 export * from "./createLetterRequest";
 export * from "./createLetterRequestDeliveryType";
 export * from "./createLetterResponse";
 export * from "./errorResponse";
 export * from "./healthStatus";
+export * from "./listClosureBoxesResponse";
 export * from "./waitlistRequest";
 export * from "./waitlistResponse";

@@ -17,10 +17,13 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CreateClosureBoxRequest,
+  CreateClosureBoxResponse,
   CreateLetterRequest,
   CreateLetterResponse,
   ErrorResponse,
   HealthStatus,
+  ListClosureBoxesResponse,
   WaitlistRequest,
   WaitlistResponse,
 } from "./api.schemas";
@@ -35,7 +38,6 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const getHealthCheckUrl = () => {
@@ -111,7 +113,6 @@ export function useHealthCheck<
 }
 
 /**
- * Submit an email address to join the waitlist
  * @summary Join waitlist
  */
 export const getJoinWaitlistUrl = () => {
@@ -198,7 +199,6 @@ export const useJoinWaitlist = <
 };
 
 /**
- * Save a letter with recipient, body, delivery option, and optional media attachments
  * @summary Seal a letter
  */
 export const getCreateLetterUrl = () => {
@@ -283,3 +283,181 @@ export const useCreateLetter = <
 > => {
   return useMutation(getCreateLetterMutationOptions(options));
 };
+
+/**
+ * @summary Create a closure box
+ */
+export const getCreateClosureBoxUrl = () => {
+  return `/api/closure/boxes`;
+};
+
+export const createClosureBox = async (
+  createClosureBoxRequest: CreateClosureBoxRequest,
+  options?: RequestInit,
+): Promise<CreateClosureBoxResponse> => {
+  return customFetch<CreateClosureBoxResponse>(getCreateClosureBoxUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createClosureBoxRequest),
+  });
+};
+
+export const getCreateClosureBoxMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClosureBox>>,
+    TError,
+    { data: BodyType<CreateClosureBoxRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createClosureBox>>,
+  TError,
+  { data: BodyType<CreateClosureBoxRequest> },
+  TContext
+> => {
+  const mutationKey = ["createClosureBox"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createClosureBox>>,
+    { data: BodyType<CreateClosureBoxRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createClosureBox(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateClosureBoxMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createClosureBox>>
+>;
+export type CreateClosureBoxMutationBody = BodyType<CreateClosureBoxRequest>;
+export type CreateClosureBoxMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Create a closure box
+ */
+export const useCreateClosureBox = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClosureBox>>,
+    TError,
+    { data: BodyType<CreateClosureBoxRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createClosureBox>>,
+  TError,
+  { data: BodyType<CreateClosureBoxRequest> },
+  TContext
+> => {
+  return useMutation(getCreateClosureBoxMutationOptions(options));
+};
+
+/**
+ * @summary List boxes for a session
+ */
+export const getListClosureBoxesUrl = (sessionId: string) => {
+  return `/api/closure/boxes/${sessionId}`;
+};
+
+export const listClosureBoxes = async (
+  sessionId: string,
+  options?: RequestInit,
+): Promise<ListClosureBoxesResponse> => {
+  return customFetch<ListClosureBoxesResponse>(
+    getListClosureBoxesUrl(sessionId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getListClosureBoxesQueryKey = (sessionId: string) => {
+  return [`/api/closure/boxes/${sessionId}`] as const;
+};
+
+export const getListClosureBoxesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listClosureBoxes>>,
+  TError = ErrorType<unknown>,
+>(
+  sessionId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listClosureBoxes>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListClosureBoxesQueryKey(sessionId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listClosureBoxes>>
+  > = ({ signal }) =>
+    listClosureBoxes(sessionId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!sessionId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listClosureBoxes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListClosureBoxesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listClosureBoxes>>
+>;
+export type ListClosureBoxesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List boxes for a session
+ */
+
+export function useListClosureBoxes<
+  TData = Awaited<ReturnType<typeof listClosureBoxes>>,
+  TError = ErrorType<unknown>,
+>(
+  sessionId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listClosureBoxes>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListClosureBoxesQueryOptions(sessionId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
