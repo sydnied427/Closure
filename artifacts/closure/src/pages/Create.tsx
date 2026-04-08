@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mic, Image as ImageIcon, Video, X, Calendar as CalendarIcon, ArrowRight, ArrowLeft } from "lucide-react";
+import { Mic, Image as ImageIcon, Video, X, Calendar as CalendarIcon, ArrowRight, ArrowLeft, Lock } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
