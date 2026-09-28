@@ -5,6 +5,7 @@ import { useLocation } from 'wouter';
 import { NoiseBackground } from '@/components/NoiseBackground';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { WaitlistForm } from '@/components/WaitlistForm';
+import { trackEvent } from '@/lib/analytics';
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -60,7 +61,7 @@ export default function Home() {
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
               <button
-                onClick={() => navigate("/write")}
+                 onClick={() => { trackEvent('letter_started', { location: 'hero' }); navigate("/write"); }}
                 className="inline-flex h-14 items-center justify-center rounded-md bg-primary px-8 text-lg font-serif font-medium text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 hover:-translate-y-0.5 transition-all duration-300"
               >
                 Write Your First Letter

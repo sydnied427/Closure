@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCreateLetter } from "@workspace/api-client-react";
+import { trackEvent } from "@/lib/analytics";
 
 type DeliveryType = "sealed" | "date";
 
@@ -118,6 +119,11 @@ export default function Write() {
           audioData: audio.state.base64 ?? null,
           videoData: video.state.base64 ?? null,
         },
+      });
+      trackEvent("letter_saved", {
+        delivery_type: deliveryType,
+        has_audio: Boolean(audio.state.base64),
+        has_video: Boolean(video.state.base64),
       });
       setSubmitted(true);
     } catch {

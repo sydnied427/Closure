@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { getOrCreateSessionId } from "@/lib/session";
+import { trackEvent } from "@/lib/analytics";
 import { useCreateClosureBox } from "@workspace/api-client-react";
 import { useAuth } from "@workspace/replit-auth-web";
 import { 
@@ -81,6 +82,14 @@ export default function Create() {
         }),
         animDelay,
       ]);
+      trackEvent("box_sealed", {
+        fate: formData.fate ?? "seal",
+        theme: formData.theme ?? "classic",
+        signed_in: isAuthenticated,
+        has_audio: Boolean(formData.audioData),
+        has_photo: Boolean(formData.photoData),
+        has_video: Boolean(formData.videoData),
+      });
       setStep(6);
     } catch (error) {
       toast({ title: "Error", description: "Could not seal your box. Please try again.", variant: "destructive" });
@@ -360,7 +369,7 @@ export default function Create() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Sign in to save your box forever and access it from any device.
                   </p>
-                  <Button onClick={login} variant="outline" size="sm" className="w-full font-medium">
+                   <Button onClick={() => { trackEvent("sign_in_clicked", { location: "seal_prompt" }); login(); }} variant="outline" size="sm" className="w-full font-medium">
                     Sign in to save
                   </Button>
                 </motion.div>

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { useAuth } from "@workspace/replit-auth-web";
+import { trackEvent } from "@/lib/analytics";
 
 export function Navbar() {
   const { isAuthenticated, isLoading, login, logout } = useAuth();
@@ -15,7 +16,7 @@ export function Navbar() {
         </Link>
         {!isLoading && !isAuthenticated && (
           <button
-            onClick={login}
+            onClick={() => { trackEvent("sign_in_clicked", { location: "navigation" }); login(); }}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Sign in

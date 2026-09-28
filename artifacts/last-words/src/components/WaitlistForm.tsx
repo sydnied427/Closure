@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useJoinWaitlist } from '@workspace/api-client-react';
+import { trackEvent } from '@/lib/analytics';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
@@ -31,6 +32,7 @@ export function WaitlistForm() {
   const onSubmit = async (data: WaitlistFormValues) => {
     try {
       await joinWaitlistMutation.mutateAsync({ data });
+      trackEvent('waitlist_joined');
       setIsSuccess(true);
       reset();
     } catch (error) {
